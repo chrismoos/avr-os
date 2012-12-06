@@ -1,3 +1,13 @@
+#ifndef MAX_TASKS
+#ifdef ARDUINO
+
+#define MAX_TASKS 5
+#define TICK_INTERVAL 10
+#define TASK_STACK_SIZE 256
+
+#endif
+#endif
+
 struct task_definition {
     void *arg;
     void *address;

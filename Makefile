@@ -8,7 +8,10 @@ APP_OBJECTS=build/main.o
 
 ifeq ($(PLATFORM), arm)
 
-ARM_HOME := /Users/chrismoos/arm-cs-tools
+ifeq ($(ARM_HOME),)
+$(error ARM_HOME must be defined.)
+endif
+
 CC := $(ARM_HOME)/bin/arm-none-eabi-gcc
 
 TARGET_OS_TASK_STACK_SIZE := 2048
@@ -29,7 +32,7 @@ CFLAGS += -Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000 \
 
 CFLAGS += -DSIMAVR
 
-OS_SOURCES+=platform/avr.c
+OS_SOURCES+=utility/avr.c
 
 ifeq ($(DEVICE),atmega1280)
 	TARGET_MMCU := atmega1280
@@ -78,7 +81,7 @@ os: build
 else
 os: build
 	$(CC) $(CFLAGS) -c os.c -o build/os.o
-	$(CC) $(CFLAGS) -c platform/avr.c -o build/avr.o
+	$(CC) $(CFLAGS) -c utility/avr.c -o build/avr.o
 	$(CC) $(CFLAGS) -c main.c -o build/main.o
 	$(CC) $(CFLAGS) build/os.o build/avr.o build/main.o ~/Storage/opensource/hello-avr-os/.lib/arduino.a -o build/program
 endif
