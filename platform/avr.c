@@ -128,13 +128,6 @@ void _os_platform_switch_tasks() {
             tasks[cur_task].running = 1;
             tempSp = tasks[cur_task].saved_sp;
 
-            /*uint8_t **y = tasks[cur_task].saved_sp;
-            printf("dump: ");
-            for(; y < (uint8_t**)((uint16_t)tasks[cur_task].saved_sp + 35); y++) {
-                printf("%04x: %04x ", (uint16_t)y, (uint16_t)*y);
-            }
-            printf("\n");*/
-
             break;
         }
     }

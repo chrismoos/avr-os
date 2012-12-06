@@ -31,7 +31,6 @@ int start_task(void *addr, void *arg, uint16_t start_delay) {
         int x;
         for(x = 0; x < num_tasks; x++) {
             if(tasks[x].done == 1) {
-                printf("found an old task, taking over\n");
                 tasks[x].address = addr;
                 tasks[x].arg = arg;
                 tasks[x].start_delay_secs = start_delay;
@@ -42,7 +41,6 @@ int start_task(void *addr, void *arg, uint16_t start_delay) {
                 return 0;
             }
         }
-        printf("can't schedule tasks, max active hit: %d\n", MAX_TASKS);
         return -1;
     }
     else {
@@ -98,13 +96,10 @@ void os_init() {
 }
 
 void os_exit_task() {
-    printf("exit!!\n");
     tasks[cur_task].running = 0;
     tasks[cur_task].done = 1;
-    printf("do other\n");
 
     do_something_else();
-    printf("wtf???\n");
 }
 
 uint64_t os_get_uptime() {
