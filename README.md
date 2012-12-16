@@ -26,6 +26,10 @@ limitations under the License.
 
 ## Sample sketch
 
+This sketch has two tasks that update the LCD.
+
+![example](https://raw.github.com/chrismoos/avr-os/master/example.png)
+
 ```cpp
 #include <Arduino.h>
 #include <LiquidCrystal.h>
