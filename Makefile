@@ -17,10 +17,13 @@ CFLAGS += -nostdlib -fno-builtin -mcpu=arm1176jz-s
 
 else
 
-AVR_HOME := /Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr
-CC := $(AVR_HOME)/bin/avr-gcc
+ifeq ($(AVR_HOME),)
+AVR_HOME := /Applications/Arduino.app/Contents/Resources/Java
+endif
+
+CC := $(AVR_HOME)/hardware/tools/avr/bin/avr-gcc
 CFLAGS += -Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000 \
-	-DF_CPU=16000000 -I $(AVR_HOME)/include  -I/usr/local/include -O1
+	-DF_CPU=16000000 -I $(AVR_HOME)/hardware/tools/avr/lib/avr/include  -I/usr/local/include -O1
 
 CFLAGS += -DSIMAVR
 
