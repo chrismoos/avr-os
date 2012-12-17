@@ -316,3 +316,28 @@ void _os_platform_spinlock_release(spinlock_t *lock) {
     *lock = 0;
     sei();
 }
+
+void _os_platform_mutex_acquire(mutex_t *mutex) {
+    uint8_t pending = 0;
+
+    while(1) {
+        cli();
+        if(mutex->value == 0 && (mutex->wait == 0 || mutex->wait == cur_task)) {
+            mutex->value = 1; 
+            mutex->wait = 0;
+            sei();
+            return;
+        }
+        else {
+            if(pending == 0 && mutex->wait == 0) {
+                pending = 1; 
+                mutex->wait = cur_task;
+            }
+            _os_platform_do_something_else();
+        }
+    }
+}
+
+void _os_platform_mutex_release(mutex_t *mutex) {
+    mutex->value = 0;
+}

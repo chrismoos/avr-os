@@ -31,6 +31,9 @@ extern void _os_platform_do_something_else();
 extern void _os_platform_spinlock_acquire();
 extern void _os_platform_spinlock_release();
 
+extern void _os_platform_mutex_acquire(mutex_t *mutex);
+extern void _os_platform_mutex_release(mutex_t *mutex);
+
 
 extern int main();
 
@@ -78,7 +81,7 @@ void do_something_else() {
 }
 
 void os_sleep(uint16_t millis) {
-    tasks[cur_task].delayMillis = millis;
+    tasks[cur_task].delayMillis = millis - TICK_INTERVAL;
     do_something_else();
 }
 
@@ -142,4 +145,16 @@ void spinlock_acquire(spinlock_t *lock) {
 
 void spinlock_release(spinlock_t *lock) {
     _os_platform_spinlock_release(lock); 
+}
+
+void mutex_init(mutex_t *mutex) {
+    memset((void*)mutex, 0, sizeof(struct mutex_t));
+}
+
+void mutex_acquire(mutex_t *mutex) {
+    _os_platform_mutex_acquire(mutex);
+}
+
+void mutex_release(mutex_t *mutex) {
+    _os_platform_mutex_release(mutex);
 }

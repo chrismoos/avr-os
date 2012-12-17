@@ -60,3 +60,13 @@ typedef volatile int spinlock_t;
 void spinlock_init(spinlock_t *lock);
 void spinlock_acquire(spinlock_t *lock);
 void spinlock_release(spinlock_t *lock);
+
+struct mutex_t {
+    uint8_t value;
+    uint8_t wait;
+};
+typedef volatile struct mutex_t mutex_t;
+
+void mutex_init(mutex_t *mutex);
+void mutex_acquire(mutex_t *mutex);
+void mutex_release(mutex_t *mutex);
