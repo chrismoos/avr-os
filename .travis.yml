@@ -12,4 +12,4 @@ before_script:
   - tar xzf arduino.tar.gz
   - export AVR_HOME="$(pwd)/arduino-1.0.3"
   - cd ../
-script: make all
+script: make test
