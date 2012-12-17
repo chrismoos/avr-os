@@ -1,5 +1,7 @@
 # avr-os
 
+[![Build Status](https://travis-ci.org/chrismoos/avr-os.png?branch=master)](https://travis-ci.org/chrismoos/avr-os)
+
 avr-os is a library that provides a very basic rutime that enables your program to multitask.
 
 The library uses pre-emptive multitasking to switch tasks and each task has its own stack that is restored when a task is resumed. An AVR timer is used to provide ticks and this interrupt is used to switch tasks.
