@@ -67,11 +67,16 @@ os: build
 	$(ARM_HOME)/bin/arm-none-eabi-gcc -T platform/arm11_link.ld build/main.o build/arm11.o build/os.o build/start.o build/vectors.o -o build/program
 	$(ARM_HOME)/bin/arm-none-eabi-objcopy -O binary build/program build/program.img
 else
+test: os
+	$(CC) $(CFLAGS) -I. -c test/test.c -o build/test.o 
+	$(CC) $(CFLAGS) build/os.o build/avr.o build/test.o -o build/test
+	simavr -m $(TARGET_MMCU) -v -f 16000000 build/test
+
 os: build
 	$(CC) $(CFLAGS) -c os.c -o build/os.o
 	$(CC) $(CFLAGS) -c utility/avr.c -o build/avr.o
 	$(CC) $(CFLAGS) -I. -c example/main.c -o build/main.o
-	$(CC) $(CFLAGS) build/os.o build/avr.o build/main.o ~/Storage/opensource/hello-avr-os/.lib/arduino.a -o build/program
+	$(CC) $(CFLAGS) build/os.o build/avr.o build/main.o -o build/program
 endif
 
 run: all
