@@ -23,7 +23,7 @@ endif
 
 CC := $(AVR_HOME)/hardware/tools/avr/bin/avr-gcc
 CFLAGS += -Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000 \
-	-DF_CPU=16000000 -I $(AVR_HOME)/hardware/tools/avr/lib/avr/include  -I/usr/local/include -O1
+	-DF_CPU=16000000 -I $(AVR_HOME)/hardware/tools/avr/lib/avr/include  -I/usr/local/include -O1 -Wall
 
 CFLAGS += -DSIMAVR
 

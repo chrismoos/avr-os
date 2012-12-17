@@ -75,7 +75,7 @@ void spinlock_init(spinlock_t *lock);
 void spinlock_acquire(spinlock_t *lock);
 void spinlock_release(spinlock_t *lock);
 
-struct mutex_t {
+struct mutex_s {
     // This is set to 1 if the mutex is currently held or 0 if available.
     uint8_t value;
 
@@ -87,7 +87,7 @@ struct mutex_t {
     // may occur.
     uint8_t wait;
 };
-typedef volatile struct mutex_t mutex_t;
+typedef volatile struct mutex_s mutex_t;
 
 /**
  * Initialize a mutex. 

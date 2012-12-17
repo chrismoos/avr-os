@@ -28,8 +28,8 @@ extern int _os_platform_schedule_task(os_task_function function, void *arg, uint
 extern void _os_platform_switch_tasks();
 extern void _os_platform_do_something_else();
 
-extern void _os_platform_spinlock_acquire();
-extern void _os_platform_spinlock_release();
+extern void _os_platform_spinlock_acquire(spinlock_t *lock);
+extern void _os_platform_spinlock_release(spinlock_t *lock);
 
 extern void _os_platform_mutex_acquire(mutex_t *mutex);
 extern void _os_platform_mutex_release(mutex_t *mutex);
@@ -85,7 +85,7 @@ void os_sleep(uint16_t millis) {
     do_something_else();
 }
 
-void _os_hangout() {
+void _os_hangout(void *arg) {
     while(1) {
         _os_platform_sleep();
     }
@@ -148,7 +148,7 @@ void spinlock_release(spinlock_t *lock) {
 }
 
 void mutex_init(mutex_t *mutex) {
-    memset((void*)mutex, 0, sizeof(struct mutex_t));
+    memset((void*)mutex, 0, sizeof(mutex_t));
 }
 
 void mutex_acquire(mutex_t *mutex) {
