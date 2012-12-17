@@ -17,7 +17,6 @@
 
 #include <stdint.h>
 
-
 typedef void(*os_task_function)(void *arg);
 
 /**
@@ -37,10 +36,25 @@ void os_init();
  */
 void os_loop();
 
+/**
+ * Schedules a task for execution.
+ *
+ * @param function The function that will execute when the task is started.
+ * @param arg A user defined value that will be passed to the task.
+ * @param start_delay_secs The amount of seconds before starting this task or
+ * 0 if the task should be started immediately.
+ */
 int os_schedule_task(os_task_function function, void *arg, uint16_t start_delay_secs);
 
+/**
+ * This MUST be called at the end of a task.
+ */
 void os_exit_task();
 
+
+/**
+ * Suspends the current task for the specified time.
+ */
 void os_sleep(uint16_t millis);
 
 /**
@@ -62,11 +76,40 @@ void spinlock_acquire(spinlock_t *lock);
 void spinlock_release(spinlock_t *lock);
 
 struct mutex_t {
+    // This is set to 1 if the mutex is currently held or 0 if available.
     uint8_t value;
+
+    // This is set to the next task waiting for the mutex.
+    // A queue could be used but this should give a good balance of fairness
+    // and performance.
+    //
+    // NOTE: Tasks must always release their mutexes before exiting or a deadlock 
+    // may occur.
     uint8_t wait;
 };
 typedef volatile struct mutex_t mutex_t;
 
+/**
+ * Initialize a mutex. 
+ *
+ * After initializiation the mutex is available to acquire.
+ */
 void mutex_init(mutex_t *mutex);
+
+/**
+ * Acquires the specified mutex.
+ *
+ * If the mutex is being held by another task this call 
+ * will block and another task will be executed.
+ *
+ * When this function returns, the mutex is held by the current task.
+ */
 void mutex_acquire(mutex_t *mutex);
+
+/**
+ * Releases the specified mutex.
+ *
+ * This should only be called after a call to mutex_acquire();
+ * In addition, calls to acquire/release should be balanced.
+ */
 void mutex_release(mutex_t *mutex);
