@@ -10,6 +10,7 @@ before_install:
   - cd ../
   - wget -O "arduino.tar.gz" "http://arduino.googlecode.com/files/arduino-1.0.3-linux64.tgz"
   - tar xzf arduino.tar.gz
+  - find . -name "*"
   - export AVR_HOME="$(pwd)/arduino-1.0.3"
   - cd ../
 script: make all
