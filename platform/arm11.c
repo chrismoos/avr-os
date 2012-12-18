@@ -71,7 +71,7 @@ uint32_t *task_stack_top_ptr = &task_stack_top;
 
 volatile uint32_t *VECTOR_TABLE = (uint32_t*)0;
 
-
+void __attribute__((naked)) _os_platform_do_something_else();
 
 int print_uart0(const char *s) {
  int x = 0; 
@@ -112,9 +112,7 @@ void _os_platform_init() {
 }
 
 void _os_platform_loop() {
-    while(1) {
-        asm volatile("wfi");
-	}
+     _os_platform_do_something_else(); 
 }
 
 void _os_platform_sleep() {
@@ -132,11 +130,19 @@ uint32_t *retAddress = 0;
 
 void _os_platform_switch_tasks() {
     if(num_tasks == 0) return;
-    ///printf("switching()\n");
 
+    uint8_t searched = num_tasks;
     while(1) {
         cur_task++;
-        if(cur_task == num_tasks) cur_task = 0;
+        if(cur_task == num_tasks || cur_task == -1) cur_task = 0;
+        if(searched == 0) {
+            cur_task = -1;
+            while(1) {
+                sei();
+                _os_platform_sleep();
+            }
+        }
+        searched--;
 
         if(tasks[cur_task].running == 1 && tasks[cur_task].done == 0) {
             if(tasks[cur_task].delayMillis <= 0) {
@@ -149,11 +155,11 @@ void _os_platform_switch_tasks() {
                 tasks[cur_task].original_sp = task_stack_top_ptr;
                 tasks[cur_task].saved_sp = task_stack_top_ptr;
                 task_stack_top_ptr -= TASK_STACK_SIZE;
+                memset(tasks[cur_task].original_sp - TASK_STACK_SIZE, 0, TASK_STACK_SIZE);
             }
             else {
                 tasks[cur_task].saved_sp = tasks[cur_task].original_sp;
             }
-            memset(tasks[cur_task].original_sp - TASK_STACK_SIZE, 0, TASK_STACK_SIZE);
 
             retAddress = tasks[cur_task].address;
             tasks[cur_task].running = 1;
@@ -210,7 +216,7 @@ void _os_platform_update_delay_millis() {
  */
 //void __attribute__((interrupt("SWI"))) swi_handler() {
 void __attribute__((naked)) swi_handler() {
-    
+    cli();
 
     _os_platform_switch_tasks();
     sp1 = tasks[cur_task].saved_sp;
@@ -322,16 +328,21 @@ void _os_platform_mutex_acquire(mutex_t *mutex) {
 
     while(1) {
         cli();
-        if(mutex->value == 0 && (mutex->wait == 0 || mutex->wait == cur_task)) {
-            mutex->value = 1; 
-            mutex->wait = 0;
+
+        // For some reason if the access is volatile qemu locks up.
+        // I have yet to test on an actual device but for now we treat
+        // this as non-volatile.
+        struct mutex_s *s = (struct mutex_s*)mutex;
+        if(s->value == 0 && (s->wait == 0 || s->wait == cur_task)) {
+            s->value = 1; 
+            s->wait = 0;
             sei();
             return;
         }
         else {
-            if(pending == 0 && mutex->wait == 0) {
+            if(pending == 0 && s->wait == 0) {
                 pending = 1; 
-                mutex->wait = cur_task;
+                s->wait = cur_task;
             }
             _os_platform_do_something_else();
         }

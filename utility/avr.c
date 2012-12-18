@@ -41,6 +41,8 @@ AVR_MCU_SIMAVR_CONSOLE(&GPIOR0);
 static void *tempSp;
 void *stackTop, *tasksStackTop;
 
+void _os_platform_do_something_else();
+
 #ifdef SIMAVR
 static int uart_putchar(char c, FILE *stream)
 {
@@ -81,10 +83,7 @@ void _os_platform_loop() {
     stackTop -= 32;
     tasksStackTop = stackTop - 256;
 
-    sei();
-
-    while(1)
-        sleep_cpu();
+    _os_platform_do_something_else();
 }
 
 void _os_platform_sleep() {
@@ -108,9 +107,16 @@ void _os_platform_switch_tasks() {
     if(num_tasks == 0) return;
 
 
+    uint8_t searched = num_tasks;
     while(1) {
         cur_task++;
         if(cur_task == num_tasks) cur_task = 0;
+        if(searched == 0) {
+            cur_task = -1;
+            sei();
+            sleep_cpu();
+        }
+        searched--;
 
         if(tasks[cur_task].running == 1) {
             if(tasks[cur_task].delayMillis <= 0) {
@@ -148,7 +154,6 @@ void _os_platform_switch_tasks() {
             break;
         }
     }
-
     
 }
 
@@ -202,8 +207,8 @@ ISR(TIMER1_COMPA_vect, ISR_NAKED) {
     }
 
 
-    _os_platform_switch_tasks();
     _os_platform_update_delay_millis();
+    _os_platform_switch_tasks();
 
     RESTORE_CONTEXT(tempSp)
     asm volatile("reti");

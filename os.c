@@ -81,7 +81,7 @@ void do_something_else() {
 }
 
 void os_sleep(uint16_t millis) {
-    tasks[cur_task].delayMillis = millis - TICK_INTERVAL;
+    tasks[cur_task].delayMillis = millis;
     do_something_else();
 }
 
@@ -110,14 +110,14 @@ void _os_task_delay_starter(void *arg) {
 
 void os_init() {
     _os_platform_init();
-    
-    _os_platform_schedule_task(_os_hangout, NULL, 0, 0);
+
     _os_platform_schedule_task(_os_task_delay_starter, NULL, 0, 0);
 }
 
 void os_exit_task() {
     tasks[cur_task].running = 0;
     tasks[cur_task].done = 1;
+    cur_task = -1;
 
     do_something_else();
 }

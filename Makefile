@@ -10,7 +10,7 @@ CC := $(ARM_HOME)/bin/arm-none-eabi-gcc
 
 TARGET_OS_TASK_STACK_SIZE := 2048
 TARGET_OS_TICK_INTERVAL_MS := 10
-TARGET_OS_MAX_TASKS := 8
+TARGET_OS_MAX_TASKS := 5
 
 AS_FLAGS += -mcpu=arm1176jz-s
 CFLAGS += -nostdlib -fno-builtin -mcpu=arm1176jz-s

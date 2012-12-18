@@ -31,11 +31,14 @@ void kernel_task(void *arg) {
 }
 
 void user_task(void *arg) {
-    mutex_acquire(&mutex);
-    printf("user task: %lu\n", (long)os_get_uptime_millis());
-    mutex_release(&mutex);
+    int x = 0;
+    for(x = 0; x < 2; x++) {
+        mutex_acquire(&mutex);
+        printf("user task: %lu, n: %d\n", (long)os_get_uptime_millis(), x);
+        mutex_release(&mutex);
 
-    os_sleep(2000);
+        os_sleep(1000);
+    }
 
     os_schedule_task(user_task, NULL, 1);
     os_exit_task();
