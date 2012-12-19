@@ -51,5 +51,5 @@ extern task_definition tasks[MAX_TASKS];
 extern volatile int cur_task;
 extern volatile int num_tasks;
 
-extern uint64_t uptime_secs;
+extern uint32_t uptime_secs;
 extern uint64_t uptime_millis;

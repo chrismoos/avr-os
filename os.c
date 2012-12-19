@@ -42,7 +42,7 @@ task_definition tasks[MAX_TASKS];
 volatile int cur_task = -1;
 volatile int num_tasks = 0;
 
-uint64_t uptime_secs = 0;
+uint32_t uptime_secs = 0;
 uint64_t uptime_millis = 0;
 
 int start_task(void *addr, void *arg, uint16_t start_delay) {
@@ -125,7 +125,7 @@ void os_exit_task() {
     do_something_else();
 }
 
-uint64_t os_get_uptime() {
+uint32_t os_get_uptime() {
     return uptime_secs;
 }
 

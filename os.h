@@ -60,7 +60,7 @@ void os_sleep(uint16_t millis);
 /**
  * Returns the amount of seconds since the OS has started.
  */
-uint64_t os_get_uptime();
+uint32_t os_get_uptime();
 
 /**
  * Returns the amount of milliseconds since the OS has started.
