@@ -25,12 +25,18 @@
 #endif
 #endif
 
+#define TASK_FLAG_RUNNING 1
+#define TASK_FLAG_DONE 2
+
+#define BV(bit) (1 << bit)
+#define BIT_CLEAR(n, bit) n &= ~BV(bit);
+#define BIT_SET(n, bit) n |= BV(bit);
+#define BIT_ISSET(n, bit) (n & BV(bit))
 
 struct task_definition {
     void *arg;
     void *address;
-    uint8_t running;
-    uint8_t done;
+    uint8_t flags;
     void *original_sp;
     void *saved_sp;
     uint32_t start_delay_secs;

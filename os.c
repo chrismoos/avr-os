@@ -50,12 +50,15 @@ int start_task(void *addr, void *arg, uint16_t start_delay) {
         // search for a task that is marked as done, take it over
         int x;
         for(x = 0; x < num_tasks; x++) {
-            if(tasks[x].done == 1) {
+            if(BIT_ISSET(tasks[x].flags, TASK_FLAG_DONE)) {
                 tasks[x].address = addr;
                 tasks[x].arg = arg;
                 tasks[x].start_delay_secs = start_delay;
-                tasks[x].done = 0;
-                tasks[x].running = 0;
+
+                // reset flags
+                // running = 0
+                // done = 0
+                tasks[x].flags = 0;
                 tasks[x].saved_sp = NULL;
                 tasks[x].delayMillis = 0;
                 return 0;
@@ -98,7 +101,7 @@ void _os_task_delay_starter(void *arg) {
         uptime_secs++;
 
         for(x = 0; x < num_tasks; x++) {
-            if(tasks[x].running == 0 && tasks[x].done != 1 &&
+            if(!BIT_ISSET(tasks[x].flags, TASK_FLAG_RUNNING) && !BIT_ISSET(tasks[x].flags, TASK_FLAG_DONE) &&
                 tasks[x].start_delay_secs > 0) {
 
                 tasks[x].start_delay_secs -= 1;
@@ -115,8 +118,8 @@ void os_init() {
 }
 
 void os_exit_task() {
-    tasks[cur_task].running = 0;
-    tasks[cur_task].done = 1;
+    BIT_CLEAR(tasks[cur_task].flags, TASK_FLAG_RUNNING);
+    BIT_SET(tasks[cur_task].flags, TASK_FLAG_DONE);
     cur_task = -1;
 
     do_something_else();

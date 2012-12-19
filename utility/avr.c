@@ -118,13 +118,13 @@ void _os_platform_switch_tasks() {
         }
         searched--;
 
-        if(tasks[cur_task].running == 1) {
+        if(BIT_ISSET(tasks[cur_task].flags, TASK_FLAG_RUNNING)) {
             if(tasks[cur_task].delayMillis <= 0) {
                 tempSp = tasks[cur_task].saved_sp;
                 break;
             }
         }
-        else if(tasks[cur_task].done == 1) {
+        else if(BIT_ISSET(tasks[cur_task].flags, TASK_FLAG_DONE)) {
             continue;
         }
         else if(tasks[cur_task].start_delay_secs == 0) {
@@ -148,7 +148,7 @@ void _os_platform_switch_tasks() {
             *(registerStartAddr - 25) = (((uint16_t)tasks[cur_task].arg) >> 8);
 
             tasks[cur_task].saved_sp = top - 35;
-            tasks[cur_task].running = 1;
+            BIT_SET(tasks[cur_task].flags, TASK_FLAG_RUNNING);
             tempSp = tasks[cur_task].saved_sp;
 
             break;
@@ -183,7 +183,7 @@ void _os_platform_do_something_else() {
 void _os_platform_update_delay_millis() {
     int x;
     for(x = 0; x < num_tasks; x++) {
-        if(tasks[x].running == 1 && tasks[x].delayMillis > 0) {
+        if(BIT_ISSET(tasks[x].flags, TASK_FLAG_RUNNING) && tasks[x].delayMillis > 0) {
             tasks[x].delayMillis -= TICK_INTERVAL;
         }
     }
