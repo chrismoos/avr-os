@@ -20,6 +20,7 @@ You can create a static library for avr-os by issuing the following command:
 
 * arduino_uno
 * arduino_mega
+* arduino_mega2560
 
 ## License
 
