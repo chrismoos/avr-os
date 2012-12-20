@@ -10,6 +10,17 @@ The library uses pre-emptive multitasking to switch tasks and each task has its 
 
     git clone git://github.com/chrismoos/avr-os.git ~/Documents/Arduino/libraries/avros
 
+## Building
+
+You can create a static library for avr-os by issuing the following command:
+
+    make DEVICE=arduino_uno
+
+## Supported devices
+
+* arduino_uno
+* arduino_mega
+
 ## License
 
 Copyright 2012 Chris Moos

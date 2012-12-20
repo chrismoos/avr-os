@@ -1,0 +1,6 @@
+include device/arduino/common.mk
+
+TARGET_MMCU := atmega1280
+TARGET_OS_TASK_STACK_SIZE := 512
+TARGET_OS_TICK_INTERVAL_MS := 10
+TARGET_OS_MAX_TASKS := 18
