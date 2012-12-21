@@ -114,7 +114,8 @@ void _os_platform_switch_tasks() {
         if(searched == 0) {
             cur_task = -1;
             sei();
-            sleep_cpu();
+            while(1)
+                sleep_cpu();
         }
         searched--;
 
