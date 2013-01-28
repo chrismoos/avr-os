@@ -21,7 +21,7 @@ TARGET_AVR_OS_OUT = build/avr-os.a
 TARGET_AVR_EXAMPLE_OUT = build/avr-os-example.img
 
 os: build-dir
-	@echo "Compiling OS sources..."
+	@echo -e "$(ccgreen)Compiling OS sources...$(ccend)"
 	$(CC) $(CFLAGS) -c os.c -o build/os.o
 	$(CC) $(CFLAGS) -c utility/avr.c -o build/avr.o
 	rm -f $(TARGET_AVR_OS_OUT)
@@ -29,7 +29,7 @@ os: build-dir
 	$(AR) rcs $(TARGET_AVR_OS_OUT) build/avr.o 
 
 example: os
-	@echo "Creating example..."
+	@echo -e "$(ccgreen)Creating example...$(ccend)"
 	$(CC) $(CFLAGS) -I. -c example/main.c -o build/main.o
 	$(CC) $(CFLAGS) build/main.o $(TARGET_AVR_OS_OUT) -o $(TARGET_AVR_EXAMPLE_OUT)
 

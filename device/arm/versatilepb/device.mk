@@ -20,7 +20,7 @@ TARGET_AVR_OS_OUT = build/avr-os.a
 TARGET_AVR_EXAMPLE_OUT = build/avr-os-example.img
 
 os: build-dir
-	@echo "Compiling OS sources..."
+	@echo -e "$(ccgreen)Compiling OS sources...$(ccend)"
 	$(CC) $(CFLAGS) -c os.c -o build/os.o
 	$(CC) $(CFLAGS) -c platform/arm11.c -o build/arm11.o
 	$(ARM_HOME)/bin/arm-none-eabi-as $(AS_FLAGS) -o build/start.o platform/arm11.s
@@ -31,7 +31,7 @@ os: build-dir
 	$(AR) rcs $(TARGET_AVR_OS_OUT) build/vectors.o
 
 example: os
-	@echo "Creating example..."
+	@echo -e "$(ccgreen)Creating example...$(ccend)"
 	$(CC) $(CFLAGS) -I. -c example/main.c -o build/main.o
 	$(CC) -T platform/arm11_link.ld build/main.o $(TARGET_AVR_OS_OUT) -o build/program
 	$(ARM_HOME)/bin/arm-none-eabi-objcopy -O binary build/program $(TARGET_AVR_EXAMPLE_OUT)
