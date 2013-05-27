@@ -51,6 +51,10 @@ int os_schedule_task(os_task_function function, void *arg, uint16_t start_delay_
  */
 void os_exit_task();
 
+/**
+ * Switches to the next available task.
+ */
+void os_yield();
 
 /**
  * Suspends the current task for the specified time.

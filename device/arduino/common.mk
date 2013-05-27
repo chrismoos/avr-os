@@ -47,8 +47,8 @@ run: example
 	simavr -m $(TARGET_MMCU) -v -f 16000000 $(TARGET_AVR_EXAMPLE_OUT)
 
 test: os
-	$(CC) $(CFLAGS) -I. -c test/test.c -o build/test.o 
-	$(CC) $(CFLAGS) $(TARGET_AVR_OS_OUT) build/test.o -o build/test
+	$(CC) $(CFLAGS) -I. -c test/test.c -o build/test.o
+	$(CC) $(CFLAGS) build/test.o $(TARGET_AVR_OS_OUT) -o build/test
 	simavr -m $(TARGET_MMCU) -v -f 16000000 build/test
 
 .PHONY: os example run test

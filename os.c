@@ -24,6 +24,7 @@
 extern void _os_platform_init();
 extern void _os_platform_loop();
 extern void _os_platform_sleep();
+extern void _os_yield();
 extern int _os_platform_schedule_task(os_task_function function, void *arg, uint16_t start_delay_secs, uint8_t clear_interrupts);
 extern void _os_platform_switch_tasks();
 extern void _os_platform_do_something_else();
@@ -137,6 +138,9 @@ void os_loop() {
     _os_platform_loop();
 }
 
+void os_yield() {
+    _os_platform_do_something_else();
+}
 
 void spinlock_init(spinlock_t *lock) {
     *lock = 0;
