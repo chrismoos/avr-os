@@ -22,6 +22,22 @@ You can create a static library for avr-os by issuing the following command:
 * arduino_mega
 * arduino_mega2560
 
+## Arduino/AVR specific
+
+### Choosing a timer
+
+The following timers are supported by *avr-os* to use for multitasking:
+
+* TIMER0 (8-bit)
+* TIMER1 (16-bit)
+* TIMER2 (8-bit)
+
+When building use the **CONFIG_AVR_TIMER** flag. For example, to specify TIMER2 to be used:
+
+    make CONFIG_AVR_TIMER=2 DEVICE=arduino_uno
+
+*Note*: TIMER1 is the default timer if not specified.
+
 ## License
 
 Copyright 2012 Chris Moos

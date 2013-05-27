@@ -65,6 +65,8 @@ void _os_platform_init() {
 
     cli();
 
+#if CONFIG_AVR_TIMER == 1
+
     // clear on compare match
     TCCR1A = _BV(COM1A1);
 
@@ -74,6 +76,22 @@ void _os_platform_init() {
     OCR1A = F_CPU / 256 / (1000 / TICK_INTERVAL);
 
     TIMSK1 = _BV(OCIE1A);
+
+#elif CONFIG_AVR_TIMER == 0
+    
+    TCCR0A = _BV(COM0A1) | _BV(WGM01);
+    TCCR0B = _BV(CS02) | _BV(CS00);
+    OCR0A = F_CPU / 1024 / (1000 / TICK_INTERVAL);
+    TIMSK0 = _BV(OCIE0A);
+
+#elif CONFIG_AVR_TIMER == 2
+    
+    TCCR2A = _BV(COM2A1) | _BV(WGM11);
+    TCCR2B = _BV(CS22) | _BV(CS21) | _BV(CS20);
+    OCR2A = F_CPU / 1024 / (1000 / TICK_INTERVAL);
+    TIMSK2 = _BV(OCIE2A);
+
+#endif
 }
 
 void _os_platform_loop() {
@@ -190,7 +208,13 @@ void _os_platform_update_delay_millis() {
     }
 }
 
+#if CONFIG_AVR_TIMER == 0
+ISR(TIMER0_COMPA_vect, ISR_NAKED) {
+#elif CONFIG_AVR_TIMER == 1
 ISR(TIMER1_COMPA_vect, ISR_NAKED) {
+#elif CONFIG_AVR_TIMER == 2
+ISR(TIMER2_COMPA_vect, ISR_NAKED) {
+#endif
     SAVE_CONTEXT(tempSp)
 
     // set the stack top for the ISR

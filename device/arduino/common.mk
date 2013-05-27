@@ -2,6 +2,14 @@ ifeq ($(AVR_HOME),)
 AVR_HOME := /Applications/Arduino.app/Contents/Resources/Java
 endif
 
+ifeq ($(CONFIG_AVR_TIMER),)
+CONFIG_AVR_TIMER := 1
+endif
+
+ifeq (,$(filter $(CONFIG_AVR_TIMER), 0 1 2))
+$(error Only TIMER 0, 1, and 2 are supported for CONFIG_AVR_TIMER)
+endif
+
 CC := $(AVR_HOME)/hardware/tools/avr/bin/avr-gcc
 LD := $(AVR_HOME)/hardware/tools/avr/bin/avr-ld
 AR := $(AVR_HOME)/hardware/tools/avr/bin/avr-ar
@@ -16,6 +24,8 @@ endif
 CFLAGS += -DMAX_TASKS=$(TARGET_OS_MAX_TASKS)
 CFLAGS += -DTASK_STACK_SIZE=$(TARGET_OS_TASK_STACK_SIZE)
 CFLAGS += -DTICK_INTERVAL=$(TARGET_OS_TICK_INTERVAL_MS)
+
+CFLAGS += -DCONFIG_AVR_TIMER=$(CONFIG_AVR_TIMER)
 
 TARGET_AVR_OS_OUT = build/avr-os.a
 TARGET_AVR_EXAMPLE_OUT = build/avr-os-example.img
