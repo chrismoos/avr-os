@@ -5,4 +5,4 @@ before_script: cd $TRAVIS_BUILD_DIR && ./ci/setup_env.sh
 script: 
   - cd $TRAVIS_BUILD_DIR 
   - export AVR_HOME="$TRAVIS_BUILD_DIR/build/arduino-1.0.3"
-  - ./ci/setup_env.sh
+  - ./ci/test.sh
