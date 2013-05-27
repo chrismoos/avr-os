@@ -2,6 +2,4 @@ language: c
 compiler:
   - gcc
 before_script: source ./ci/setup_env.sh
-script:
-  - cd $TRAVIS_BUILD_DIR
-  - ./ci/test.sh
+script: cd $TRAVIS_BUILD_DIR && ./ci/test.sh
