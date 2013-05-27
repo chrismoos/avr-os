@@ -2,7 +2,7 @@ language: c
 compiler:
   - gcc
 before_script:
-  - sudo apt-get install gcc-avr avr-libc libelf-dev pkg-config freeglut3 freeglut3-dev
+  - sudo apt-get -q -y install gcc-avr avr-libc libelf-dev pkg-config freeglut3 freeglut3-dev
   - mkdir -p build
   - cd build
   - git clone git://gitorious.org/simavr/simavr
