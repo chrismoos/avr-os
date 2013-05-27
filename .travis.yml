@@ -1,5 +1,5 @@
 language: c
 compiler:
   - gcc
-before_script: ./ci/setup_env.sh
+before_script: source ./ci/setup_env.sh
 script: ./ci/test.sh
