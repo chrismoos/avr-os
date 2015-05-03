@@ -2,6 +2,14 @@ ifeq ($(AVR_HOME),)
 AVR_HOME := /Applications/Arduino.app/Contents/Resources/Java
 endif
 
+ifeq ($(AVR_INC),)
+AVR_INC := $(shell locate avr/include | head -1)
+endif
+
+ifeq ($(ARDUINO_INC),)
+ARDUINO_INC := $(shell locate Arduino.h | head -1 | sed "s/\/Arduino.h//")
+endif
+
 ifeq ($(CONFIG_AVR_TIMER),)
 CONFIG_AVR_TIMER := 1
 endif
@@ -10,11 +18,12 @@ ifeq (,$(filter $(CONFIG_AVR_TIMER), 0 1 2))
 $(error Only TIMER 0, 1, and 2 are supported for CONFIG_AVR_TIMER)
 endif
 
-CC := $(AVR_HOME)/hardware/tools/avr/bin/avr-gcc
-LD := $(AVR_HOME)/hardware/tools/avr/bin/avr-ld
-AR := $(AVR_HOME)/hardware/tools/avr/bin/avr-ar
+CC := $(shell locate avr-gcc | head -1)
+LD := $(shell locate avr-ld | head -1)
+AR := $(shell locate avr-ar | head -1)
 CFLAGS += -Wl,--undefined=_mmcu,--section-start=.mmcu=0x910000 \
-	-DF_CPU=16000000 -I $(AVR_HOME)/hardware/tools/avr/lib/avr/include  -I/usr/local/include -O1 -Wall
+	-DF_CPU=16000000 -I $(AVR_HOME)/hardware/tools/avr/lib/avr/include \
+	-I$(AVR_INC) -I$(ARDUINO_INC) -I/usr/local/include -O1 -Wall
 CFLAGS += -mmcu=$(TARGET_MMCU)
 
 ifeq ($(CONFIG_SIMAVR),1)
