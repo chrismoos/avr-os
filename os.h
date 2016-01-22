@@ -117,3 +117,7 @@ void mutex_acquire(mutex_t *mutex);
  * In addition, calls to acquire/release should be balanced.
  */
 void mutex_release(mutex_t *mutex);
+
+/*
+ * The end of the file.
+ */
