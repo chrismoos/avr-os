@@ -4,7 +4,7 @@ set -e
 sudo apt-get -q -y install gcc-avr avr-libc libelf-dev pkg-config freeglut3 freeglut3-dev
 mkdir -p build
 cd build
-git clone git://gitorious.org/simavr/simavr
+git clone https://github.com/buserror/simavr
 cd simavr && sudo make install
 cd ../
 wget -O "arduino.tar.gz" "http://arduino.googlecode.com/files/arduino-1.0.3-linux64.tgz"
