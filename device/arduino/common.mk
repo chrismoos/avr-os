@@ -1,5 +1,5 @@
 ifeq ($(AVR_HOME),)
-AVR_HOME := /Applications/Arduino.app/Contents/Resources/Java
+	AVR_HOME := /Applications/Arduino.app/Contents/Java
 endif
 
 ifeq ($(CONFIG_AVR_TIMER),)
