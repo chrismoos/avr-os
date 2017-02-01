@@ -44,11 +44,11 @@ example: os
 	$(CC) $(CFLAGS) build/main.o $(TARGET_AVR_OS_OUT) -o $(TARGET_AVR_EXAMPLE_OUT)
 
 run: example
-	simavr -m $(TARGET_MMCU) -v -f 16000000 $(TARGET_AVR_EXAMPLE_OUT)
+	simavr -m $(TARGET_MMCU) -v -v -f 16000000 $(TARGET_AVR_EXAMPLE_OUT)
 
 test: os
 	$(CC) $(CFLAGS) -I. -c test/test.c -o build/test.o
 	$(CC) $(CFLAGS) build/test.o $(TARGET_AVR_OS_OUT) -o build/test
-	simavr -m $(TARGET_MMCU) -v -f 16000000 build/test
+	simavr -m $(TARGET_MMCU) -v -v -f 16000000 build/test
 
 .PHONY: os example run test
