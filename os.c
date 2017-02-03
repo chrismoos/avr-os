@@ -50,7 +50,7 @@ int start_task(void *addr, void *arg, uint16_t start_delay) {
     if(num_tasks == MAX_TASKS) {
         // search for a task that is marked as done, take it over
         int x;
-        for(x = 0; x < num_tasks; x++) {
+        for(x = 0; x < num_tasks; ++x) {
             if(BIT_ISSET(tasks[x].flags, TASK_FLAG_DONE)) {
                 tasks[x].address = addr;
                 tasks[x].arg = arg;
